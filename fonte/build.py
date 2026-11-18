@@ -40,9 +40,9 @@ DADOS = {
     "CREFITO": "",
 }
 
-# Domínio onde o site vai ficar (sem barra no final).
-# PROVISÓRIO: troque pelo domínio definitivo antes de publicar.
-DOMINIO = "https://www.camilabagli.com.br"
+# Endereço onde o site está publicado (sem barra no final).
+# Ao trocar pelo domínio definitivo, rode build.py de novo e suba os arquivos.
+DOMINIO = "https://insticamilabagli.vercel.app"
 
 # Depoimentos: o Código de Ética do COFFITO (Res. 424/2013, art. 10, V)
 # veda o uso de mensagens de pacientes na divulgação. Por isso o site
@@ -92,7 +92,7 @@ def main():
         "name": d["NOME"],
         "description": d["DESCRICAO"],
         "url": DOMINIO + "/",
-        "image": DOMINIO + "/og-image.jpg?v=1",
+        "image": DOMINIO + "/og-image.jpg?v=2",
         "telephone": "+" + d["WHATSAPP"],
         "address": {
             "@type": "PostalAddress",

@@ -31,61 +31,93 @@ SANS_B = FONTES / "InstrumentSans-Bold.ttf"
 
 NOME_1, NOME_2 = "Camila", "M. S. Bagli"
 FRASE = ["Hipnose clínica,", "Constelação Sistêmica", "e Barras de Access"]
-CIDADE = ["Ribas do Rio Pardo/MS", "e online"]
+CIDADE = ["Ribas do Rio Pardo/MS", "Presencial e online"]
 SELO = "Agende pelo WhatsApp"
 
 S = 2  # superamostragem para bordas suaves
 
 
+def texto_espacado(d, xy, texto, fonte, cor, espaco):
+    x, y = xy
+    for ch in texto:
+        d.text((x, y), ch, font=fonte, fill=cor)
+        x += d.textlength(ch, font=fonte) + espaco
+    return x
+
+
+def largura_espacada(d, texto, fonte, espaco):
+    return sum(d.textlength(ch, font=fonte) + espaco for ch in texto) - espaco
+
+
+def fonte_que_cabe(caminho, texto, tam, largura_max, d):
+    while tam > 10:
+        f = ImageFont.truetype(str(caminho), tam)
+        if d.textlength(texto, font=f) <= largura_max:
+            return f
+        tam -= 1
+    return ImageFont.truetype(str(caminho), tam)
+
+
 def og():
+    """Fundo ameixa, retrato no centro (a miniatura quadrada do WhatsApp corta o meio)."""
     W, H = 1200 * S, 630 * S
-    im = Image.new("RGB", (W, H), GIZ)
+    im = Image.new("RGB", (W, H), AMEIXA)
     d = ImageDraw.Draw(im)
 
-    # mesa
-    d.ellipse([300 * S, 470 * S, 900 * S, 700 * S], fill=DAMASCO)
-
-    # retrato redondo no centro
-    diam = 400 * S
+    # retrato redondo com anel laranja
+    diam = 420 * S
+    cx, cy = 600 * S, 300 * S
+    anel = 9 * S
+    folga = 9 * S
+    d.ellipse([cx - diam // 2 - folga - anel, cy - diam // 2 - folga - anel, cx + diam // 2 + folga + anel, cy + diam // 2 + folga + anel], fill=LARANJA)
+    d.ellipse([cx - diam // 2 - folga, cy - diam // 2 - folga, cx + diam // 2 + folga, cy + diam // 2 + folga], fill=AMEIXA)
     foto = Image.open(AQUI / "fotos" / "hero.jpg").convert("RGB")
-    foto = ImageOps.fit(foto, (diam, diam), Image.LANCZOS, centering=(0.5, 0.45))
+    foto = ImageOps.fit(foto, (diam, diam), Image.LANCZOS, centering=(0.5, 0.42))
     mascara = Image.new("L", (diam, diam), 0)
     ImageDraw.Draw(mascara).ellipse([0, 0, diam - 1, diam - 1], fill=255)
-    cx, cy = 600 * S, 290 * S
-    d.ellipse([cx - diam // 2 - 12 * S, cy - diam // 2 - 12 * S, cx + diam // 2 + 12 * S, cy + diam // 2 + 12 * S], fill=GIZ)
     im.paste(foto, (cx - diam // 2, cy - diam // 2), mascara)
 
+    esquerda_max = (cx - diam // 2 - folga - anel) - 64 * S - 30 * S
+    x = 64 * S
 
-    serif = ImageFont.truetype(str(SERIF), 50 * S)
-    sans = ImageFont.truetype(str(SANS), 25 * S)
-    sans_b = ImageFont.truetype(str(SANS_B), 24 * S)
-
-    # esquerda: nome e frase
-    x = 60 * S
-    d.text((x, 150 * S), NOME_1, font=serif, fill=AMEIXA)
-    d.text((x, 210 * S), NOME_2, font=serif, fill=AMEIXA)
-    y = 300 * S
+    # esquerda: rotulo, nome e tecnicas
+    rot = ImageFont.truetype(str(SANS_B), 17 * S)
+    d.ellipse([x, 170 * S, x + 9 * S, 179 * S], fill=LARANJA)
+    texto_espacado(d, (x + 22 * S, 163 * S), "TERAPEUTA INTEGRATIVA", rot, LARANJA, 3.2 * S)
+    nome = fonte_que_cabe(SERIF, NOME_2, 60 * S, esquerda_max, d)
+    d.text((x, 205 * S), NOME_1, font=nome, fill=DAMASCO)
+    d.text((x, 275 * S), NOME_2, font=nome, fill=DAMASCO)
+    sans = ImageFont.truetype(str(SANS), 23 * S)
+    y = 375 * S
     for linha in FRASE:
-        d.text((x, y), linha, font=sans, fill=SUAVE)
-        y += 36 * S
+        d.text((x, y), linha, font=sans, fill=(217, 195, 184))
+        y += 34 * S
 
-    # direita: cidade e selo
+    # direita: cidade e selo do WhatsApp
     xr = 1140 * S
-    y = 190 * S
-    for linha in CIDADE:
-        w = d.textlength(linha, font=sans)
-        d.text((xr - w, y), linha, font=sans, fill=SUAVE)
-        y += 36 * S
-    w = d.textlength(SELO, font=sans_b)
-    px, py = 26 * S, 18 * S
-    caixa = [xr - w - 2 * px, 300 * S, xr, 300 * S + 30 * S + 2 * py]
-    r = 14 * S
+    direita_min = cx + diam // 2 + folga + anel + 30 * S
+    larg = xr - direita_min
+    cid = ImageFont.truetype(str(SANS), 23 * S)
+    y = 205 * S
+    for i, linha in enumerate(CIDADE):
+        w = d.textlength(linha, font=cid)
+        d.text((xr - w, y), linha, font=cid, fill=DAMASCO if i == 0 else (217, 195, 184))
+        y += 34 * S
+    selo = fonte_que_cabe(SANS_B, SELO, 23 * S, larg - 48 * S, d)
+    w = d.textlength(SELO, font=selo)
+    px, py = 24 * S, 20 * S
+    topo = 300 * S
+    caixa = [xr - w - 2 * px, topo, xr, topo + 28 * S + 2 * py]
+    r = 12 * S
     d.rounded_rectangle(caixa, radius=r, fill=LARANJA)
-    d.rounded_rectangle([caixa[2] - 2 * r - 20 * S, caixa[3] - 2 * r - 20 * S, caixa[2], caixa[3]], radius=r + 16 * S, fill=LARANJA)
-    d.text((caixa[0] + px, caixa[1] + py + 2 * S), SELO, font=sans_b, fill=AMEIXA)
+    # canto inferior direito bem arredondado, a assinatura do site
+    d.rectangle([caixa[2] - 40 * S, caixa[3] - 40 * S, caixa[2], caixa[3]], fill=AMEIXA)
+    d.pieslice([caixa[2] - 80 * S, caixa[3] - 80 * S, caixa[2], caixa[3]], 0, 90, fill=LARANJA)
+    d.rectangle([caixa[2] - 40 * S, caixa[3] - 40 * S, caixa[2] - 0, caixa[3] - 40 * S + 1], fill=LARANJA)
+    d.text((caixa[0] + px, caixa[1] + py + 1 * S), SELO, font=selo, fill=AMEIXA)
 
     im = im.resize((1200, 630), Image.LANCZOS)
-    im.save(RAIZ / "og-image.jpg", "JPEG", quality=86, optimize=True, progressive=True)
+    im.save(RAIZ / "og-image.jpg", "JPEG", quality=85, optimize=True, progressive=True)
 
 
 def icone(tam, nome):
