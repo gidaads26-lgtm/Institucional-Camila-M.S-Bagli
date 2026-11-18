@@ -59,6 +59,7 @@
 *,*::before,*::after{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;scroll-padding-top:var(--header-h)}
 body{overflow-x:clip}
+main > section,.rodape{overflow-x:clip}
 html.trava{overflow:hidden}
 body{
   margin:0;background:var(--giz);color:var(--texto);
@@ -81,6 +82,7 @@ h3{font-size:1.3rem;line-height:1.25}
 .secao{padding-block:clamp(4.5rem, 10vw, 7.5rem)}
 .intro{max-width:38rem;color:var(--suave);margin-top:1rem}
 .rotulo{
+  width:fit-content;
   display:flex;align-items:center;gap:.75rem;margin:0 0 1.1rem;
   font:600 .8rem/1.4 var(--sans);letter-spacing:.24em;text-transform:uppercase;color:var(--cobre);
 }
@@ -104,17 +106,32 @@ h3{font-size:1.3rem;line-height:1.25}
   content:"";position:absolute;inset:0;z-index:-1;background:var(--ameixa);
   clip-path:inset(0 100% 0 0);transition:clip-path .38s var(--ease);
 }
-.btn svg{width:1.3rem;height:1.3rem;flex:none}
+.btn svg{width:1.3rem;height:1.3rem;flex:none;transition:transform .25s var(--ease)}
 @media (hover:hover){
   .btn:hover{color:var(--damasco)}
   .btn:hover::before{clip-path:inset(0 0 0 0)}
+  .btn:hover svg{transform:translateY(-1px) rotate(-12deg) scale(1.08)}
 }
 .btn:active{transform:scale(.97)}
 .btn--claro{background:var(--damasco)}
 .btn--claro::before{background:var(--laranja)}
 @media (hover:hover){.btn--claro:hover{color:var(--ameixa)}}
 .btn--linha{background:transparent;color:var(--ameixa);box-shadow:inset 0 0 0 1.5px var(--ameixa)}
-.btn.pulsa svg{animation:pulsa .5s var(--ease)}
+/* brilho que atravessa o botao quando ele aparece */
+.btn::after{
+  content:"";position:absolute;top:-20%;bottom:-20%;left:0;width:42%;pointer-events:none;
+  background:linear-gradient(100deg, rgba(255,255,255,0), rgba(255,255,255,.5), rgba(255,255,255,0));
+  transform:translateX(-170%) skewX(-18deg);
+}
+.btn--linha::after{background:linear-gradient(100deg, rgba(245,145,23,0), rgba(245,145,23,.28), rgba(245,145,23,0))}
+.btn.brilha::after{animation:brilho 1.15s var(--ease)}
+@keyframes brilho{to{transform:translateX(340%) skewX(-18deg)}}
+/* onda a partir do ponto de toque */
+.onda{position:absolute;border-radius:50%;pointer-events:none;background:currentColor;opacity:.3;transform:scale(0);animation:onda .7s var(--ease) forwards}
+@keyframes onda{to{transform:scale(1);opacity:0}}
+[data-wa].pulsa svg{animation:pulsa .55s var(--ease)}
+[data-ig].gira svg{animation:gira .7s var(--ease)}
+@keyframes gira{to{transform:rotate(360deg)}}
 @keyframes pulsa{40%{transform:scale(1.3) rotate(-8deg)}100%{transform:none}}
 
 .link-seta{
@@ -181,20 +198,39 @@ h3{font-size:1.3rem;line-height:1.25}
 .topo .marca strong,.topo .marca span{transition:color .3s var(--ease)}
 .menu-aberto .topo .marca strong{color:var(--damasco)}
 .menu-aberto .topo .marca span{color:var(--suave-ameixa)}
-.painel a:not(.btn){
-  display:flex;align-items:center;min-height:3.4rem;text-decoration:none;
-  font:400 clamp(1.9rem, 8vw, 2.6rem)/1.1 var(--serif);color:var(--damasco);
-  opacity:0;transform:translateY(14px);transition:opacity .4s var(--ease), transform .45s var(--ease);
+.painel nav a{
+  position:relative;display:flex;align-items:center;min-height:3.6rem;overflow:hidden;text-decoration:none;
+  font:400 clamp(1.9rem, 8vw, 2.6rem)/1.1 var(--serif);color:var(--damasco);transition:color .2s var(--ease);
 }
-.painel a:not(.btn):active{color:var(--laranja)}
+.painel nav a span{display:block;transform:translateY(115%) rotate(4deg);transform-origin:left bottom;transition:transform .5s var(--ease)}
+.painel nav a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:rgba(253,227,196,.16);transform:scaleX(0);transform-origin:left;transition:transform .5s var(--ease)}
+.painel nav a::before{content:"";position:absolute;right:.25rem;top:50%;width:.55rem;height:.55rem;margin-top:-.275rem;border-radius:50%;background:var(--laranja);transform:scale(0);transition:transform .25s var(--ease)}
+.painel nav a:active{color:var(--laranja)}
+.painel nav a:active::before{transform:scale(1)}
+@media (hover:hover){.painel nav a:hover::before{transform:scale(1)}.menu-aberto .painel nav a:hover span{transform:translateX(.4rem);transition-delay:0s;transition-duration:.3s}}
+.menu-aberto .painel nav a span{transform:none;transition-duration:.75s}
+.menu-aberto .painel nav a::after{transform:none;transition-duration:.9s}
+.painel-redes{display:flex;gap:.9rem;margin-top:1.75rem}
+.painel-redes a{
+  position:relative;overflow:hidden;display:grid;place-items:center;width:3.4rem;height:3.4rem;border-radius:50%;
+  color:var(--damasco);box-shadow:inset 0 0 0 1px rgba(253,227,196,.35);
+  opacity:0;transform:translateY(12px) scale(.8);transition:opacity .4s var(--ease), transform .5s var(--ease);
+}
+.painel-redes svg{width:1.3rem;height:1.3rem}
+.menu-aberto .painel-redes a{opacity:1;transform:none}
+.menu-aberto .painel-redes a:nth-child(1){transition-delay:.42s}
+.menu-aberto .painel-redes a:nth-child(2){transition-delay:.48s}
+.menu-aberto .painel-redes a:nth-child(n):active{transform:scale(.9);transition-delay:0s}
+.hamb{transition:rotate .5s var(--ease), transform .18s var(--ease), color .3s var(--ease)}
+.menu-aberto .hamb{rotate:180deg}
 .painel .btn{margin-top:2rem;opacity:0;transform:translateY(14px);transition:opacity .4s var(--ease) .32s, transform .45s var(--ease) .32s, color .22s var(--ease)}
-.menu-aberto .painel a:not(.btn),.menu-aberto .painel .btn{opacity:1;transform:none}
+.menu-aberto .painel .btn{opacity:1;transform:none}
 .menu-aberto .painel .btn:active{transform:scale(.97);transition-delay:0s}
-.painel nav a:nth-child(1){transition-delay:.12s}
-.painel nav a:nth-child(2){transition-delay:.16s}
-.painel nav a:nth-child(3){transition-delay:.2s}
-.painel nav a:nth-child(4){transition-delay:.24s}
-.painel nav a:nth-child(5){transition-delay:.28s}
+.menu-aberto .painel nav a:nth-child(1) span,.menu-aberto .painel nav a:nth-child(1)::after{transition-delay:.1s}
+.menu-aberto .painel nav a:nth-child(2) span,.menu-aberto .painel nav a:nth-child(2)::after{transition-delay:.15s}
+.menu-aberto .painel nav a:nth-child(3) span,.menu-aberto .painel nav a:nth-child(3)::after{transition-delay:.2s}
+.menu-aberto .painel nav a:nth-child(4) span,.menu-aberto .painel nav a:nth-child(4)::after{transition-delay:.25s}
+.menu-aberto .painel nav a:nth-child(5) span,.menu-aberto .painel nav a:nth-child(5)::after{transition-delay:.3s}
 
 /* hero */
 .hero{padding-top:calc(var(--header-h) + clamp(1.5rem, 5vw, 4rem));padding-bottom:clamp(3.5rem, 8vw, 6rem)}
@@ -256,7 +292,8 @@ h3{font-size:1.3rem;line-height:1.25}
 .objetivos{padding-block:clamp(3.5rem, 7vw, 5rem)}
 .objetivos h2{font-size:clamp(1.6rem, 2.6vw, 2.1rem);max-width:24ch}
 .objetivos ul{list-style:none;margin:2.5rem 0 0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:2rem 1.75rem}
-.objetivos li{border-top:1.5px solid var(--ameixa);padding-top:1.25rem;font-weight:500;color:var(--ameixa);line-height:1.45}
+.objetivos li{position:relative;padding-top:1.25rem;font-weight:500;color:var(--ameixa);line-height:1.45}
+.objetivos li::before{content:"";position:absolute;top:0;left:0;right:0;height:1.5px;background:var(--ameixa);transform-origin:left}
 .objetivos li svg{width:2.4rem;height:2.4rem;margin-bottom:.9rem;color:var(--cobre)}
 
 /* atendimentos */
@@ -300,7 +337,7 @@ h3{font-size:1.3rem;line-height:1.25}
 
 /* quem sou eu */
 .sobre .wrap{display:grid;grid-template-columns:.8fr 1.2fr;gap:clamp(2.5rem, 6vw, 6rem);align-items:center}
-.foto-sobre{position:relative;margin:0}
+.foto-sobre{position:relative;margin:0;overflow:hidden;border-radius:var(--canto) var(--canto) clamp(3rem, 8vw, 6rem) var(--canto)}
 .foto-sobre img{width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:var(--canto) var(--canto) clamp(3rem, 8vw, 6rem) var(--canto)}
 .sobre .cargo{display:block;color:var(--cobre);font-weight:600;margin:.6rem 0 1.6rem}
 .sobre p{color:var(--suave)}
@@ -341,7 +378,7 @@ h3{font-size:1.3rem;line-height:1.25}
 .final .divisor{display:block;width:3.5rem;height:2px;margin-top:1.6rem;background:var(--laranja)}
 .final .linha-cta{display:flex;align-items:center;gap:.9rem}
 .ig{
-  display:grid;place-items:center;flex:none;width:3.5rem;height:3.5rem;border-radius:50%;
+  position:relative;overflow:hidden;display:grid;place-items:center;flex:none;width:3.5rem;height:3.5rem;border-radius:50%;
   color:var(--damasco);box-shadow:inset 0 0 0 1.5px rgba(253,227,196,.5);transition:transform .2s var(--ease), box-shadow .25s var(--ease);
 }
 .ig svg{width:1.4rem;height:1.4rem}
@@ -368,7 +405,7 @@ h3{font-size:1.3rem;line-height:1.25}
 @media (hover:hover){.rod-endereco:hover{color:var(--damasco)}}
 .rod-redes{display:flex;justify-content:center;gap:1rem;margin-top:1.9rem}
 .rod-redes a{
-  display:grid;place-items:center;width:3.4rem;height:3.4rem;border-radius:50%;color:var(--damasco);
+  position:relative;overflow:hidden;display:grid;place-items:center;width:3.4rem;height:3.4rem;border-radius:50%;color:var(--damasco);
   box-shadow:inset 0 0 0 1px rgba(253,227,196,.32);transition:transform .2s var(--ease), box-shadow .25s var(--ease);
 }
 .rod-redes svg{width:1.3rem;height:1.3rem}
@@ -381,6 +418,11 @@ h3{font-size:1.3rem;line-height:1.25}
 
 .pontos{display:none}
 
+/* caixas: resposta ao toque e ao passar o mouse */
+.caixa{transition:translate .35s var(--ease), scale .25s var(--ease)}
+.frases .caixa:active,.endereco:active,.online:active,.ainda:active{scale:.985}
+@media (hover:hover){.caixa:hover{translate:0 -5px}}
+
 /* barra fixa e aviso */
 .barra{
   position:fixed;left:0;right:0;bottom:0;z-index:40;display:none;
@@ -391,6 +433,14 @@ h3{font-size:1.3rem;line-height:1.25}
 }
 .barra .btn{width:100%}
 .barra.visivel{transform:none}
+.barra.visivel.primeira .btn svg{animation:toca 1s var(--ease) .45s}
+.barra.visivel.primeira .btn::after{animation:brilho 1.15s var(--ease) .6s}
+.barra .btn.pulsa svg{animation:pulsa .55s var(--ease)}
+@keyframes toca{0%,100%{transform:none}15%{transform:rotate(-16deg) scale(1.12)}35%{transform:rotate(13deg) scale(1.12)}55%{transform:rotate(-9deg)}75%{transform:rotate(5deg)}}
+.progresso{position:fixed;left:0;right:0;top:0;height:3px;z-index:56;pointer-events:none}
+.progresso i{position:absolute;inset:0;background:var(--laranja);transform:scaleX(0);transform-origin:left}
+.menu-aberto .progresso{opacity:0}
+@media (prefers-reduced-motion:reduce){.progresso{display:none}}
 .aviso{
   position:fixed;left:50%;bottom:1.25rem;z-index:80;width:max-content;max-width:calc(100vw - 2.5rem);
   padding:.85rem 1.25rem;border-radius:var(--canto) var(--canto) 1.4rem var(--canto);
@@ -411,11 +461,62 @@ h3{font-size:1.3rem;line-height:1.25}
   .js .hero .acoes{animation-delay:.4s}
   .js .hero .onde{animation-delay:.5s}
   .js .retrato{clip-path:circle(0% at 50% 60%);animation:revela 1.1s var(--ease) .1s forwards}
-  .js   .js   .js   .js   .js   .js 
-  .js [data-revela]{opacity:0;transform:translateY(16px);transition:opacity .7s var(--ease), transform .8s var(--ease);transition-delay:calc(var(--i,0) * 70ms)}
+
+  /* texto: sobe e aparece */
+  .js [data-revela]{opacity:0;transform:translateY(18px);transition:opacity .7s var(--ease), transform .85s var(--ease), clip-path .95s var(--ease);transition-delay:calc(var(--i,0) * 70ms)}
   .js [data-revela].dentro{opacity:1;transform:none}
+
+  /* titulos: sobem por tras de uma mascara */
+  .js h2[data-revela]{opacity:1;clip-path:inset(0 0 100% 0);transform:translateY(.55em)}
+  .js h2[data-revela].dentro{clip-path:inset(-.25em -.25em -.35em -.25em);transform:none}
+
+  /* rotulos: o ponto acende e o texto corre da esquerda */
+  .js .rotulo[data-revela]{opacity:1;transform:none;clip-path:inset(-.3em 100% -.3em -.3em)}
+  .js .rotulo[data-revela].dentro{clip-path:inset(-.3em -1em -.3em -.3em)}
+  .js .rotulo[data-revela]::before{transform:scale(0);transition:transform .55s var(--ease) .15s}
+  .js .rotulo[data-revela].dentro::before{transform:scale(1)}
+
+  /* caixas: abrem a partir de uma janela menor */
+  .js .caixa[data-revela]{
+    --d:calc(var(--i,0) * 70ms);
+    clip-path:inset(12% 6% 0 6% round 1.4rem);transform:translateY(30px);
+    transition-property:opacity, transform, clip-path, translate, scale;
+    transition-duration:.7s, .85s, .95s, .35s, .25s;
+    transition-delay:var(--d), var(--d), var(--d), 0s, 0s;
+  }
+  .js .caixa[data-revela].dentro{clip-path:inset(0 0 0 0 round 0);transform:none}
+  .js .frases .caixa[data-revela]:nth-child(odd){transform:translateX(-34px)}
+  .js .frases .caixa[data-revela]:nth-child(even){transform:translateX(34px)}
+  .js .frases .caixa[data-revela].dentro{transform:none}
+  .js .frases .caixa q{display:block;opacity:0;transform:translateY(10px);transition:opacity .6s var(--ease), transform .7s var(--ease);transition-delay:calc(var(--i,0) * 70ms + .25s)}
+  .js .frases .caixa.dentro q{opacity:1;transform:none}
+  .js .pilar .tecnica{clip-path:inset(0 100% 0 0);transition:clip-path .8s var(--ease);transition-delay:calc(var(--i,0) * 70ms + .35s)}
+  .js .pilar.dentro .tecnica{clip-path:inset(-.2em -.5em -.2em 0)}
+
+  /* fotos: cortina de baixo para cima com leve zoom */
+  .js .foto-local[data-revela],.js .foto-sobre[data-revela]{opacity:1;transform:none;clip-path:inset(100% 0 0 0);transition:clip-path 1.2s var(--ease)}
+  .js .foto-local[data-revela].dentro,.js .foto-sobre[data-revela].dentro{clip-path:inset(0 0 0 0)}
+  .js .foto-local img,.js .foto-sobre img{scale:1.18;transition:scale 1.6s var(--ease)}
+  .js .dentro > img{scale:1}
+
+  /* objetivos: a linha se desenha e o icone gira para o lugar */
+  .js .objetivos li::before{transform:scaleX(0);transition:transform 1s var(--ease);transition-delay:calc(var(--i,0) * 90ms + .1s)}
+  .js .objetivos li.dentro::before{transform:none}
+  .js .objetivos li svg{scale:.4;rotate:-30deg;transition:scale .7s var(--ease), rotate .8s var(--ease);transition-delay:calc(var(--i,0) * 90ms + .25s)}
+  .js .objetivos li.dentro svg{scale:1;rotate:0deg}
+
+  /* linha do tempo: o numero acende */
+  .etapa.ativa .num{animation:acende .6s var(--ease)}
+
+  /* rodape */
+  .js .rod-cta[data-revela] .rod-agendar::after{scale:0 1;transition:transform .3s var(--ease), scale 1s var(--ease) .3s}
+  .js .rod-cta[data-revela].dentro .rod-agendar::after{scale:1}
+  .js .rod-redes[data-revela] a{scale:.5;opacity:0;transition:transform .2s var(--ease), box-shadow .25s var(--ease), scale .7s var(--ease), opacity .5s var(--ease)}
+  .js .rod-redes[data-revela] a:nth-child(2){transition-delay:0s, 0s, .1s, .1s}
+  .js .rod-redes[data-revela].dentro a{scale:1;opacity:1}
 }
-@keyframes linha{to{clip-path:inset(0 0 -10% 0);transform:none}}
+@keyframes acende{40%{transform:scale(1.25)}100%{transform:none}}
+@keyframes linha{to{clip-path:inset(-.1em -.1em -.2em -.1em);transform:none}}
 @keyframes sobe{to{opacity:1;transform:none}}
 @keyframes revela{to{clip-path:circle(75% at 50% 60%)}}
 
@@ -455,7 +556,7 @@ h3{font-size:1.3rem;line-height:1.25}
 
   /* carrosseis */
   .carrossel{
-    display:flex;gap:.9rem;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
+    position:relative;display:flex;gap:.9rem;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
     margin-inline:calc(-1 * var(--pad));padding-inline:var(--pad);scroll-padding-inline:var(--pad);scrollbar-width:none;
   }
   .carrossel::-webkit-scrollbar{display:none}
@@ -491,7 +592,7 @@ h3{font-size:1.3rem;line-height:1.25}
   .rodape{padding-bottom:6.5rem}
   .rod-tecnicas{font-size:.74rem;letter-spacing:.12em}
 }
-@media (max-width:420px){
+@media (max-width:440px){
   .final .linha-cta .btn svg{display:none}
   .final .linha-cta .btn{padding-inline:.8rem;font-size:.93rem;min-width:0}
   .final .ig{width:3rem;height:3rem}
@@ -513,6 +614,7 @@ h3{font-size:1.3rem;line-height:1.25}
   <symbol id="i-local" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" d="M12 21s-6.5-6.1-6.5-11a6.5 6.5 0 0 1 13 0c0 4.9-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
 </svg>
 
+<div class="progresso" aria-hidden="true"><i></i></div>
 <header class="topo" id="topo-site">
   <div class="wrap">
     <a class="marca" href="#inicio" aria-label="{{NOME}}, voltar ao início">
@@ -533,13 +635,17 @@ h3{font-size:1.3rem;line-height:1.25}
 
 <div class="painel" id="painel" role="dialog" aria-modal="true" aria-label="Menu" inert>
   <nav aria-label="Menu do celular">
-    <a href="#metodo">Método</a>
-    <a href="#atendimentos">Atendimentos</a>
-    <a href="#local">Local</a>
-    <a href="#sobre">Sobre</a>
-    <a href="#duvidas">Dúvidas</a>
+    <a href="#metodo"><span>Método</span></a>
+    <a href="#atendimentos"><span>Atendimentos</span></a>
+    <a href="#local"><span>Local</span></a>
+    <a href="#sobre"><span>Sobre</span></a>
+    <a href="#duvidas"><span>Dúvidas</span></a>
   </nav>
   <a class="btn" data-wa="agendar" href="{{WA_AGENDAR}}" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-wa"/></svg>Quero agendar a minha consulta</a>
+  <div class="painel-redes">
+    <a data-ig href="{{INSTAGRAM_URL}}" target="_blank" rel="noopener" aria-label="Instagram de {{NOME}}"><svg aria-hidden="true"><use href="#i-ig"/></svg></a>
+    <a data-wa="agendar" href="{{WA_AGENDAR}}" target="_blank" rel="noopener" aria-label="WhatsApp de {{NOME}}"><svg aria-hidden="true"><use href="#i-wa"/></svg></a>
+  </div>
 </div>
 
 <main>
@@ -571,11 +677,11 @@ h3{font-size:1.3rem;line-height:1.25}
       <div>
         <p class="frases-titulo" data-revela>Alguma destas frases soa familiar?</p>
         <ul class="frases">
-          <li data-revela><q>Cuido de todo mundo e fico sempre por último.</q></li>
-          <li data-revela><q>Mudo de relacionamento, mas a história se repete.</q></li>
-          <li data-revela><q>Sinto culpa até quando não fiz nada de errado.</q></li>
-          <li data-revela><q>Tem dias em que eu não sei mais para onde ir.</q></li>
-          <li data-revela><q>Prefiro me isolar a ter que explicar o que sinto.</q></li>
+          <li class="caixa" data-revela><q>Cuido de todo mundo e fico sempre por último.</q></li>
+          <li class="caixa" data-revela><q>Mudo de relacionamento, mas a história se repete.</q></li>
+          <li class="caixa" data-revela><q>Sinto culpa até quando não fiz nada de errado.</q></li>
+          <li class="caixa" data-revela><q>Tem dias em que eu não sei mais para onde ir.</q></li>
+          <li class="caixa" data-revela><q>Prefiro me isolar a ter que explicar o que sinto.</q></li>
         </ul>
         <div class="cta-antes" data-revela><a class="btn" data-wa="agendar" href="{{WA_AGENDAR}}" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-wa"/></svg>Quero agendar a minha consulta</a></div>
       </div>
@@ -590,18 +696,18 @@ h3{font-size:1.3rem;line-height:1.25}
         <h2 id="t-metodo" data-revela>Três formas de olhar para a mesma história</h2>
         <p class="intro" data-revela>Cada técnica entra quando faz sentido para o seu momento. Muitas vezes, uma abre o caminho para a outra.</p>
         <ul class="pilares carrossel" data-carrossel>
-          <li class="pilar" data-revela>
+          <li class="pilar caixa" data-revela>
             <h3>Ver o lugar de cada um</h3>
             <span class="tecnica">Constelação Sistêmica</span>
             <p>Uma forma de olhar para a sua história familiar com respeito, entendendo o lugar de cada um e o que você carrega sem perceber.</p>
             <p class="obs">Individual ou em grupo.</p>
           </li>
-          <li class="pilar" data-revela>
+          <li class="pilar caixa" data-revela>
             <h3>Ir até onde a lembrança mora</h3>
             <span class="tecnica">Hipnose clínica</span>
             <p>Num estado de foco e relaxamento, você segue consciente e no controle. Assim fica mais fácil acessar memórias e dar a elas um novo significado.</p>
           </li>
-          <li class="pilar" data-revela>
+          <li class="pilar caixa" data-revela>
             <h3>Aquietar a mente pelo toque</h3>
             <span class="tecnica">Barras de Access</span>
             <p>Um toque leve em pontos da cabeça enquanto você descansa. É uma pausa para o corpo relaxar e a mente desacelerar.</p>
@@ -643,15 +749,15 @@ h3{font-size:1.3rem;line-height:1.25}
       <h2 id="t-atend" data-revela>O que costuma trazer as pessoas até aqui</h2>
       <p class="intro" data-revela>Se algum destes temas faz parte da sua vida, a gente pode começar por ele.</p>
       <ul class="temas carrossel" data-carrossel>
-        <li class="tema" data-revela>
+        <li class="tema caixa" data-revela>
           <h3>Emoções acumuladas</h3>
           <p>Medo, angústia e ansiedade que foram se juntando com o tempo, até não caber mais. A cabeça cheia de coisas que ainda não fazem sentido.</p>
         </li>
-        <li class="tema" data-revela>
+        <li class="tema caixa" data-revela>
           <h3>Feridas que ficaram</h3>
           <p>Culpa, vergonha e uma autoestima que não se sustenta. Experiências antigas que continuam doendo hoje, mesmo quando parecem esquecidas.</p>
         </li>
-        <li class="tema" data-revela>
+        <li class="tema caixa" data-revela>
           <h3>Vínculos e padrões familiares</h3>
           <p>Relações que repetem a mesma história, amizades sem troca, a sensação de não ter lugar na família. A Constelação ajuda a ver o que se repete.</p>
         </li>
@@ -686,12 +792,12 @@ h3{font-size:1.3rem;line-height:1.25}
       <div class="grade">
         <figure class="foto-local" data-revela><img src="{{FOTO_LOCAL}}" alt="Fachada do prédio da clínica {{LOCAL_NOME}}, com o letreiro dourado, as placas e a porta de vidro da entrada" width="900" height="1200"></figure>
         <div class="cartoes-local">
-          <div class="endereco" data-revela>
+          <div class="endereco caixa" data-revela>
             <h3>{{LOCAL_NOME}}</h3>
             <address>{{ENDERECO_RUA}}<br>{{ENDERECO_BAIRRO}}, {{CIDADE_UF}}<br>CEP {{ENDERECO_CEP}}</address>
             <a class="link-seta" href="{{MAPS_URL}}" target="_blank" rel="noopener">Abrir no mapa</a>
           </div>
-          <div class="online" data-revela>
+          <div class="online caixa" data-revela>
             <h3>Também atendo online</h3>
             <p>Por videochamada, com a mesma condução do presencial. Você só precisa de um lugar reservado, internet estável e fones de ouvido.</p>
           </div>
@@ -752,7 +858,7 @@ h3{font-size:1.3rem;line-height:1.25}
           <div class="resposta"><p>Não. As terapias integrativas são complementares e não substituem acompanhamento médico, psiquiátrico ou psicológico. Se você usa medicação, não interrompa sem orientação de quem a prescreveu. Em momentos de crise, procure atendimento de saúde ou ligue para o CVV, no 188.</p></div>
         </details>
       </div>
-      <div class="ainda" data-revela>
+      <div class="ainda caixa" data-revela>
         <div>
           <h3>Ficou alguma pergunta sem resposta?</h3>
           <p>Me mande uma mensagem e eu respondo pessoalmente.</p>
@@ -784,12 +890,12 @@ h3{font-size:1.3rem;line-height:1.25}
 <!-- 12. Rodape -->
 <footer class="rodape">
   <div class="wrap">
-    <strong class="rod-nome">{{NOME}}</strong>
-    <p class="rod-tecnicas">Hipnose clínica, Constelação Sistêmica e Barras de Access</p>
+    <strong class="rod-nome" data-revela>{{NOME}}</strong>
+    <p class="rod-tecnicas" data-revela>Hipnose clínica, Constelação Sistêmica e Barras de Access</p>
     <p class="rod-registro">{{PROFISSAO}}{{CREFITO_TEXTO}}</p>
-    <a class="rod-agendar" data-wa="agendar" href="{{WA_AGENDAR}}" target="_blank" rel="noopener">Quero agendar a minha consulta</a>
+    <div class="rod-cta" data-revela><a class="rod-agendar" data-wa="agendar" href="{{WA_AGENDAR}}" target="_blank" rel="noopener">Quero agendar a minha consulta</a></div>
     <div><a class="rod-endereco" href="{{MAPS_URL}}" target="_blank" rel="noopener">{{LOCAL_NOME}}, {{ENDERECO_RUA}}, {{ENDERECO_BAIRRO}}, {{CIDADE_UF}}, CEP&nbsp;{{ENDERECO_CEP}}. Presencial e online.</a></div>
-    <div class="rod-redes">
+    <div class="rod-redes" data-revela>
       <a data-ig href="{{INSTAGRAM_URL}}" target="_blank" rel="noopener" aria-label="Instagram de {{NOME}}"><svg aria-hidden="true"><use href="#i-ig"/></svg></a>
       <a data-wa="agendar" href="{{WA_AGENDAR}}" target="_blank" rel="noopener" aria-label="WhatsApp de {{NOME}}"><svg aria-hidden="true"><use href="#i-wa"/></svg></a>
     </div>
@@ -813,7 +919,14 @@ h3{font-size:1.3rem;line-height:1.25}
     duvida: "Olá, " + NOME_CURTO + "! Vim pelo site e tenho uma dúvida antes de agendar."
   };
   var doc = document.documentElement;
-  var reduz = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var mqReduz = window.matchMedia("(prefers-reduced-motion: reduce)");
+  var reduz = mqReduz.matches;
+  if(mqReduz.addEventListener) mqReduz.addEventListener("change", function(e){
+    reduz = e.matches;
+    if(!reduz) return;
+    document.querySelectorAll("[data-revela]").forEach(function(el){ el.classList.add("dentro"); });
+    document.querySelectorAll(".laje,.palco,.hero h1,.carrossel > li").forEach(function(el){ el.style.clipPath = ""; el.style.translate = ""; el.style.scale = ""; });
+  });
   var celular = window.matchMedia("(max-width: 1023px)");
   doc.classList.add("js");
 
@@ -842,8 +955,37 @@ h3{font-size:1.3rem;line-height:1.25}
     var a = e.target.closest("[data-wa],[data-ig]");
     if(!a) return;
     avisar(a.hasAttribute("data-wa") ? "Abrindo o WhatsApp de " + NOME_CURTO + "…" : "Abrindo o Instagram de " + NOME_CURTO + "…");
-    if(!reduz){ a.classList.remove("pulsa"); void a.offsetWidth; a.classList.add("pulsa"); }
+    if(!reduz){
+      var efeito = a.hasAttribute("data-wa") ? "pulsa" : "gira";
+      a.classList.remove(efeito); void a.offsetWidth; a.classList.add(efeito);
+    }
   });
+
+  // onda que nasce do ponto de toque nos botoes
+  if(!reduz){
+    document.addEventListener("pointerdown", function(e){
+      var b = e.target.closest(".btn,.ig,.rod-redes a,.painel-redes a");
+      if(!b) return;
+      var r = b.getBoundingClientRect();
+      var t = Math.max(r.width, r.height) * 2.4;
+      var o = document.createElement("span");
+      o.className = "onda";
+      o.style.width = o.style.height = t + "px";
+      o.style.left = (e.clientX - r.left - t / 2) + "px";
+      o.style.top = (e.clientY - r.top - t / 2) + "px";
+      b.appendChild(o);
+      var tira = function(){ if(o.parentNode) o.remove(); };
+      o.addEventListener("animationend", tira);
+      o.addEventListener("animationcancel", tira);
+      setTimeout(tira, 900);
+    }, {passive:true});
+  }
+  function brilhar(btn, atraso){
+    setTimeout(function(){
+      btn.classList.add("brilha");
+      btn.addEventListener("animationend", function fim(ev){ if(ev.pseudoElement === "::after" || ev.animationName === "brilho"){ btn.classList.remove("brilha"); btn.removeEventListener("animationend", fim); } });
+    }, atraso);
+  }
 
   // menu do celular
   var hamb = document.querySelector(".hamb");
@@ -877,6 +1019,31 @@ h3{font-size:1.3rem;line-height:1.25}
   var etapas = document.querySelector("[data-etapas]");
   var trilho = etapas && etapas.querySelector(".trilho");
   var passos = etapas ? etapas.querySelectorAll(".etapa") : [];
+  var revelar = function(){};
+  var barraProg = document.querySelector(".progresso i");
+  var palco = document.querySelector(".palco");
+  var heroTxt = document.querySelector(".hero h1");
+  var heroSec = document.getElementById("hero");
+  var lajes = document.querySelectorAll(".metodo .laje, .final .laje");
+  var estreito = window.matchMedia("(max-width: 759px)");
+  // medidas guardadas: lidas so ao carregar e ao redimensionar, nunca durante a rolagem
+  var med = {alt:0, total:0, hh:0, lajes:[], etTop:0, etH:1, marcos:[]};
+  function medir(){
+    var y = window.scrollY;
+    med.alt = window.innerHeight;
+    med.total = doc.scrollHeight - med.alt;
+    med.hh = heroSec.offsetHeight;
+    med.lajes = Array.prototype.map.call(lajes, function(l){
+      return {el:l, top:l.getBoundingClientRect().top + y, raio:getComputedStyle(l).borderTopLeftRadius};
+    });
+    if(etapas){
+      var re = etapas.getBoundingClientRect();
+      med.etTop = re.top + y; med.etH = re.height || 1;
+      med.marcos = Array.prototype.map.call(passos, function(li){ return li.offsetTop / med.etH; });
+    }
+    medirRevelar();
+  }
+  var medirRevelar = function(){};
   function quadro(){
     pendente = false;
     var y = window.scrollY;
@@ -886,20 +1053,39 @@ h3{font-size:1.3rem;line-height:1.25}
       else if(y < ultimoY - 6 || y < 140) topo.classList.remove("some");
     } else topo.classList.remove("some");
     ultimoY = y;
+    revelar(y);
+    if(!reduz){
+      // barra de leitura no topo
+      barraProg.style.transform = "scaleX(" + (med.total > 0 ? Math.min(1, y / med.total) : 0).toFixed(4) + ")";
+      // hero: a foto desce mais devagar e encolhe um pouco
+      var yy = Math.min(y, med.hh);
+      palco.style.translate = "0 " + (yy * 0.1).toFixed(1) + "px";
+      palco.style.scale = (1 - (yy / (med.hh || 1)) * 0.07).toFixed(4);
+      heroTxt.style.translate = "0 " + (-yy * 0.05).toFixed(1) + "px";
+      // blocos escuros se abrem ate a largura toda conforme entram na tela
+      var maxInset = estreito.matches ? 4 : 7;
+      med.lajes.forEach(function(L){
+        var q = Math.min(1, Math.max(0, (med.alt - (L.top - y)) / (med.alt * 0.6)));
+        var x = ((1 - q) * maxInset).toFixed(2);
+        L.el.style.clipPath = q >= 1 ? "" : "inset(0 " + x + "% 0 " + x + "% round " + L.raio + ")";
+      });
+    }
     // linha do tempo que se preenche com a rolagem
     if(etapas){
-      var r = etapas.getBoundingClientRect(), vh = window.innerHeight;
-      var p = Math.min(1, Math.max(0, (vh * 0.72 - r.top) / r.height));
+      var p = Math.min(1, Math.max(0, (med.alt * 0.72 - (med.etTop - y)) / med.etH));
       trilho.style.setProperty("--p", p.toFixed(3));
-      var horizontal = !window.matchMedia("(max-width: 759px)").matches;
+      var horizontal = !estreito.matches;
       passos.forEach(function(li, i){
-        var marco = horizontal ? (p > 0.05 ? i / (passos.length - 1) * 0.9 : 2) : (li.offsetTop / r.height);
+        var marco = horizontal ? (p > 0.05 ? i / (passos.length - 1) * 0.9 : 2) : med.marcos[i];
         li.classList.toggle("ativa", p > 0.02 && p >= marco);
       });
     }
   }
   window.addEventListener("scroll", function(){ if(!pendente){ pendente = true; requestAnimationFrame(quadro); } }, {passive:true});
-  window.addEventListener("resize", quadro);
+  window.addEventListener("resize", function(){ medir(); quadro(); });
+  window.addEventListener("load", function(){ medir(); quadro(); });
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(function(){ medir(); quadro(); });
+  medir();
   quadro();
 
   // revelacoes ao rolar
@@ -912,10 +1098,30 @@ h3{font-size:1.3rem;line-height:1.25}
       var n = 0;
       Array.prototype.forEach.call(grupo.children, function(c){ if(c.hasAttribute("data-revela")) c.style.setProperty("--i", Math.min(n++, 4)); });
     });
-    var io = new IntersectionObserver(function(ents){
-      ents.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add("dentro"); io.unobserve(en.target); } });
-    }, {rootMargin:"0px 0px -8% 0px", threshold:0.12});
-    alvos.forEach(function(el){ io.observe(el); });
+    // revela pela posicao guardada do elemento (o recorte de clip-path nao atrapalha a deteccao)
+    var pendentes = Array.prototype.map.call(alvos, function(el){ return {el:el, top:0, base:0}; });
+    medirRevelar = function(){
+      var y = window.scrollY;
+      pendentes.forEach(function(P){ var r = P.el.getBoundingClientRect(); P.top = r.top + y; P.base = r.bottom + y; });
+    };
+    revelar = function(y){
+      if(!pendentes.length) return;
+      if(y === undefined) y = window.scrollY;
+      var fim = y + med.alt >= med.total + med.alt - 4;
+      var limite = y + med.alt * (fim ? 1 : 0.9);
+      pendentes = pendentes.filter(function(P){
+        if(P.top < limite && P.base > y){
+          P.el.classList.add("dentro");
+          P.el.querySelectorAll(".btn").forEach(function(bt, i){ brilhar(bt, 650 + i * 160); });
+          return false;
+        }
+        return true;
+      });
+    };
+    medirRevelar();
+    revelar();
+    var btnHero = document.querySelector(".hero .btn");
+    if(btnHero) brilhar(btnHero, 1300);
   }
 
   // barra fixa de agendar no celular
@@ -928,6 +1134,7 @@ h3{font-size:1.3rem;line-height:1.25}
       ents.forEach(function(en){ estado[en.target === hero ? "hero" : "final"] = en.isIntersecting; });
       var ver = !estado.hero && !estado.final;
       barra.classList.toggle("visivel", ver);
+      if(ver && !barra.dataset.vista){ barra.dataset.vista = "1"; barra.classList.add("primeira"); setTimeout(function(){ barra.classList.remove("primeira"); }, 2200); }
       barra.setAttribute("aria-hidden", ver ? "false" : "true");
       barra.querySelector("a").tabIndex = ver ? 0 : -1;
     }, {threshold:0});
@@ -945,17 +1152,28 @@ h3{font-size:1.3rem;line-height:1.25}
       var b = document.createElement("button");
       b.type = "button";
       b.setAttribute("aria-label", "Ir para o cartão " + (i + 1) + " de " + itens.length);
-      b.addEventListener("click", function(){ lista.scrollTo({left:item.offsetLeft - lista.offsetLeft - parseFloat(getComputedStyle(lista).paddingLeft), behavior: reduz ? "auto" : "smooth"}); });
+      b.addEventListener("click", function(){ lista.scrollTo({left:item.offsetLeft - (parseFloat(getComputedStyle(lista).paddingLeft) || 0), behavior: reduz ? "auto" : "smooth"}); });
       pontos.appendChild(b);
     });
     lista.insertAdjacentElement("afterend", pontos);
+    var esperando = false;
     function marca(){
-      var largura = itens[0].getBoundingClientRect().width + 14;
-      var idx = Math.round(lista.scrollLeft / largura);
+      esperando = false;
+      var passo = itens[0].offsetWidth + 14;
+      var idx = Math.round(lista.scrollLeft / passo);
       if(lista.scrollLeft + lista.clientWidth >= lista.scrollWidth - 4) idx = itens.length - 1;
       pontos.querySelectorAll("button").forEach(function(b, i){ b.setAttribute("aria-current", i === idx ? "true" : "false"); });
+      // cartao em foco em tamanho cheio, os vizinhos um pouco menores (posicoes sem escala)
+      if(!reduz && estreito.matches){
+        var pad = parseFloat(getComputedStyle(lista).paddingLeft) || 0;
+        Array.prototype.forEach.call(itens, function(it){
+          var d = it.offsetLeft - pad - lista.scrollLeft;
+          var k = Math.min(1, Math.abs(d) / it.offsetWidth);
+          it.style.scale = (1 - k * 0.08).toFixed(4);
+        });
+      } else Array.prototype.forEach.call(itens, function(it){ it.style.scale = ""; });
     }
-    lista.addEventListener("scroll", function(){ requestAnimationFrame(marca); }, {passive:true});
+    lista.addEventListener("scroll", function(){ if(!esperando){ esperando = true; requestAnimationFrame(marca); } }, {passive:true});
     window.addEventListener("resize", marca);
     marca();
   });
