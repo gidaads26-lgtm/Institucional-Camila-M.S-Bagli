@@ -261,8 +261,10 @@ h3{font-size:1.3rem;line-height:1.25}
 .retrato img{width:100%;height:100%;object-fit:cover}
 
 /* antes de tudo */
-.antes .wrap{display:grid;grid-template-columns:.95fr 1.05fr;gap:clamp(2.5rem, 6vw, 6rem);align-items:start}
-.antes .fixo{position:sticky;top:calc(var(--header-h) + 2rem)}
+.antes .wrap{display:block;max-width:48rem;text-align:center}
+.antes .rotulo,.antes .destaque{margin-inline:auto}
+.antes .fixo p:not(.destaque){max-width:40rem;margin-inline:auto}
+.antes .fixo{margin-bottom:3rem}
 .destaque{font:400 clamp(1.5rem, 2.6vw, 1.95rem)/1.3 var(--serif);color:var(--cobre);margin:0 0 1.3rem}
 .antes .fixo p:not(.destaque){color:var(--suave)}
 .cta-antes{margin-top:2rem}
@@ -274,8 +276,9 @@ h3{font-size:1.3rem;line-height:1.25}
   background:#fff;border:1px solid rgba(58,30,46,.1);
   border-radius:var(--canto) var(--canto) var(--canto-grande) var(--canto);
 }
-.frases li:nth-child(even){margin-left:clamp(0rem, 5vw, 3.5rem)}
-.frases li:nth-child(3){margin-left:clamp(0rem, 2.5vw, 1.75rem)}
+.frases li{text-align:center}
+.frases li:nth-child(odd){margin-right:clamp(0rem, 6vw, 4rem)}
+.frases li:nth-child(even){margin-left:clamp(0rem, 6vw, 4rem)}
 .frases q{font:400 clamp(1.12rem, 1.6vw, 1.3rem)/1.4 var(--serif);color:var(--ameixa);quotes:"\201C" "\201D"}
 
 /* metodo */
@@ -346,12 +349,15 @@ h3{font-size:1.3rem;line-height:1.25}
 .online p{color:var(--suave-damasco);margin:0;font-size:1.02rem}
 
 /* quem sou eu */
-.sobre .wrap{display:grid;grid-template-columns:.8fr 1.2fr;gap:clamp(2.5rem, 6vw, 6rem);align-items:center}
-.foto-sobre{position:relative;margin:0;overflow:hidden;border-radius:var(--canto) var(--canto) clamp(3rem, 8vw, 6rem) var(--canto)}
+.sobre .wrap{display:block;max-width:44rem;text-align:center}
+.sobre .rotulo{margin-inline:auto}
+.sobre .acoes{justify-content:center}
+.foto-sobre{position:relative;margin:0 auto 2.75rem;max-width:21rem;overflow:hidden;border-radius:var(--canto) var(--canto) clamp(3rem, 8vw, 6rem) var(--canto)}
 .foto-sobre img{width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:var(--canto) var(--canto) clamp(3rem, 8vw, 6rem) var(--canto)}
 .sobre .cargo{display:block;color:var(--cobre);font-weight:600;margin:.6rem 0 1.6rem}
 .sobre p{color:var(--suave)}
-.sobre blockquote{margin:1.6rem 0;padding-left:1.25rem;border-left:2px solid var(--laranja);font:400 1.3rem/1.4 var(--serif);color:var(--ameixa)}
+.sobre blockquote{margin:2rem auto;padding-top:1.4rem;max-width:30rem;position:relative;font:400 1.35rem/1.4 var(--serif);color:var(--ameixa)}
+.sobre blockquote::before{content:"";position:absolute;top:0;left:50%;width:3.5rem;height:2px;margin-left:-1.75rem;background:var(--laranja)}
 .sobre .acoes{margin-top:2rem}
 
 /* duvidas */
@@ -558,8 +564,8 @@ h3{font-size:1.3rem;line-height:1.25}
   .onde{display:none}
   .palco{width:min(62vw, 15rem)}
   .antes .wrap{grid-template-columns:1fr}
-  .antes .fixo{position:static}
-  .frases li,.frases li:nth-child(n){margin-left:0}
+  .frases li,.frases li:nth-child(n){margin-inline:0}
+  .frases li:nth-child(odd){margin-right:1rem}
   .frases li:nth-child(even){margin-left:1rem}
   .acoes .btn,.antes .btn,.como .btn{width:100%}
   .cta-antes{margin-top:1.75rem}
@@ -590,7 +596,7 @@ h3{font-size:1.3rem;line-height:1.25}
   .etapa{padding:0 0 0 4.2rem}
   .local .grade{grid-template-columns:1fr}
   .sobre .wrap{grid-template-columns:1fr}
-  .foto-sobre{max-width:24rem}
+  .foto-sobre{max-width:18rem}
     .sobre .acoes .btn{flex:1 1 100%}
   .faq summary{font-size:1.1rem}
   .ainda .btn{width:100%}
@@ -809,7 +815,7 @@ h3{font-size:1.3rem;line-height:1.25}
           </div>
           <div class="online caixa" data-revela>
             <h3>Também atendo online</h3>
-            <p>Por videochamada, com a mesma condução do presencial. Você só precisa de um lugar reservado, internet estável e fones de ouvido.</p>
+            <p>A condução é a mesma do presencial. Você só precisa de um lugar reservado, internet estável e fones de ouvido.</p>
           </div>
         </div>
       </div>
@@ -883,7 +889,6 @@ h3{font-size:1.3rem;line-height:1.25}
     <div class="laje">
       <div class="wrap centro">
         <div>
-          <p class="rotulo" data-revela>Vamos conversar</p>
           <h2 id="t-final" data-revela>Você merece se cuidar por inteiro e <em>seguir mais leve</em></h2>
           <span class="divisor" aria-hidden="true" data-revela></span>
           <p data-revela>Na consulta de avaliação, você me conta o que tem vivido e sai entendendo como o processo terapêutico pode acontecer no seu caso. Presencial em Ribas do Rio Pardo/MS ou online.</p>
