@@ -90,7 +90,15 @@ h3{font-size:1.3rem;line-height:1.25}
 }
 .rotulo::before{content:"";width:.42rem;height:.42rem;border-radius:50%;background:var(--laranja);flex:none}
 .laje .rotulo{color:var(--rosa)}
-.duvidas .rotulo{justify-content:flex-start}
+/* cabecalhos de secao centralizados */
+.centro > .rotulo,.final .centro .rotulo{margin-inline:auto}
+.centro > h2,.centro > .intro{text-align:center;margin-inline:auto}
+.final .centro > div{text-align:center}
+.final .centro h2{margin-inline:auto}
+.final .centro .divisor{margin-inline:auto}
+.final .centro p{margin-inline:auto}
+.final .centro .linha-cta{justify-content:center}
+.como .centro > div[data-revela]{text-align:center}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
 
@@ -693,7 +701,7 @@ h3{font-size:1.3rem;line-height:1.25}
   <!-- 3. Metodo -->
   <section class="metodo" id="metodo" aria-labelledby="t-metodo">
     <div class="laje">
-      <div class="wrap">
+      <div class="wrap centro">
         <p class="rotulo" data-revela>Método</p>
         <h2 id="t-metodo" data-revela>Três formas de olhar para a mesma história</h2>
         <p class="intro" data-revela>Cada técnica entra quando faz sentido para o seu momento. Muitas vezes, uma abre o caminho para a outra.</p>
@@ -721,7 +729,7 @@ h3{font-size:1.3rem;line-height:1.25}
 
   <!-- 4. Objetivos -->
   <section class="objetivos" aria-labelledby="t-obj">
-    <div class="wrap">
+    <div class="wrap centro">
       <h2 id="t-obj" data-revela>O que cada consulta procura abrir</h2>
       <ul>
         <li data-revela>
@@ -746,7 +754,7 @@ h3{font-size:1.3rem;line-height:1.25}
 
   <!-- 5. Atendimentos -->
   <section class="secao atendimentos" id="atendimentos" aria-labelledby="t-atend" style="padding-top:clamp(2rem,5vw,3.5rem)">
-    <div class="wrap">
+    <div class="wrap centro">
       <p class="rotulo" data-revela>Atendimentos</p>
       <h2 id="t-atend" data-revela>O que costuma trazer as pessoas até aqui</h2>
       <p class="intro" data-revela>Se algum destes temas faz parte da sua vida, a gente pode começar por ele.</p>
@@ -769,9 +777,9 @@ h3{font-size:1.3rem;line-height:1.25}
 
   <!-- 6. Como funciona -->
   <section class="secao como" id="como" aria-labelledby="t-como">
-    <div class="wrap">
+    <div class="wrap centro">
       <p class="rotulo" data-revela>Como funciona</p>
-      <h2 id="t-como" data-revela>Do primeiro contato às consultas</h2>
+      <h2 id="t-como" data-revela>Passo a passo da terapia</h2>
       <div class="etapas-wrap" data-etapas>
       <span class="trilho" aria-hidden="true"><i></i></span>
       <ol class="etapas">
@@ -787,7 +795,7 @@ h3{font-size:1.3rem;line-height:1.25}
 
   <!-- 7. Local -->
   <section class="secao local" id="local" aria-labelledby="t-local">
-    <div class="wrap">
+    <div class="wrap centro">
       <p class="rotulo" data-revela>Local de atendimento</p>
       <h2 id="t-local" data-revela>Atendimento em Ribas do Rio Pardo/MS</h2>
       <p class="intro" data-revela>Um espaço reservado e acolhedor, pensado para você chegar no seu tempo e se sentir à vontade para falar.</p>
@@ -831,7 +839,7 @@ h3{font-size:1.3rem;line-height:1.25}
 
   <!-- 10. Duvidas -->
   <section class="secao duvidas" id="duvidas" aria-labelledby="t-duv" style="padding-top:clamp(1rem,3vw,2rem)">
-    <div class="wrap">
+    <div class="wrap centro">
       <p class="rotulo" data-revela>Dúvidas frequentes</p>
       <h2 id="t-duv" data-revela>Dúvidas que costumam aparecer</h2>
       <div class="faq">
@@ -873,7 +881,7 @@ h3{font-size:1.3rem;line-height:1.25}
   <!-- 11. Chamada final -->
   <section class="final" id="agendar" aria-labelledby="t-final">
     <div class="laje">
-      <div class="wrap">
+      <div class="wrap centro">
         <div>
           <p class="rotulo" data-revela>Vamos conversar</p>
           <h2 id="t-final" data-revela>Você merece se cuidar por inteiro e <em>seguir mais leve</em></h2>
